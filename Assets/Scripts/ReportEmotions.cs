@@ -56,7 +56,6 @@ public class ReportEmotions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
         if(timer >= nextEmotion.time)
         {
             previousEmotion = nextEmotion;
@@ -79,6 +78,8 @@ public class ReportEmotions : MonoBehaviour
             emotionGraph.addToStream(new Emotion(nextEmotion.emotionDef.emotionName,lerpMagnitude,timer));
             //emotionalState.transform.localScale = new Vector3(xScale, yScale * lerpMagnitude);
         }
+        timer += Time.deltaTime;
+        Debug.Log(timer);
     }
 
     public void PopulateEmotionalTrack()
