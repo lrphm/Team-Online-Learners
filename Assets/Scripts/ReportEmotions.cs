@@ -51,7 +51,6 @@ public class ReportEmotions : MonoBehaviour
         {
             graphBars.Add(barTrans.gameObject);
         }
-        Debug.Log(graphBars.Count);
     }
 
     // Update is called once per frame
