@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class ScenarioManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public int scenario = 1;
+    private int scenario = ParamTracker.scenario;
     private float[] offsets = { 12,0,0};
     public List<GameObject> participants;
     private string[] names = { "carl", "jason", "jess" };
@@ -142,5 +143,13 @@ public class ScenarioManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void onClick()
+    {
+        ParamTracker.scenario++;
+        if (ParamTracker.scenario > 3)
+            ParamTracker.scenario = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);        
     }
 }
