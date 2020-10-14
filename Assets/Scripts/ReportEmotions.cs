@@ -220,7 +220,7 @@ public class ReportEmotions : MonoBehaviour
         }
     } 
 
-    private struct EmotionDefinition
+    public struct EmotionDefinition
     {
         public EmotionName emotionName;
         public Color colour;
@@ -246,22 +246,28 @@ public class ReportEmotions : MonoBehaviour
                     colour = Color.red;
                     break;
                 case EmotionName.disgusted:
-                    colour = Color.magenta;
+                    colour = new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
                     break;
                 case EmotionName.scared:
-                    colour = Color.yellow;
+                    colour = new Color(0.8396226f, 0.5578821f, 0.1069331f); // orange
                     break;
                 case EmotionName.confused:
-                    colour = Color.grey;
+                    colour = Color.yellow;
                     break;
                 default:
                     colour = Color.green;
                     break;
             }
         }
+
+        public static EmotionDefinition GetEmotionDefinition(EmotionName emotionName)
+        {
+            return new EmotionDefinition(emotionName);
+        }
+
     }
 
-    private enum EmotionName
+    public enum EmotionName
     {
         happy,
         sad,
