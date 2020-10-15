@@ -6,6 +6,8 @@ public class ParamTracker : MonoBehaviour
 {
     public static int scenario = 1;
 
+    public GameObject startCanvas, meetingCanvas;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -20,5 +22,23 @@ public class ParamTracker : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void DropdownChanged(int index)
+    {
+        scenario = index + 1;
+    }
+
+    public void JoinMeeting()
+    {
+        startCanvas.SetActive(false);
+        meetingCanvas.SetActive(true);
+        meetingCanvas.GetComponent<ScenarioManager>().Init();
+    }
+
+    public void LeaveMeeting()
+    {
+        meetingCanvas.GetComponent<ScenarioManager>().Disable();
+        startCanvas.SetActive(true);
     }
 }

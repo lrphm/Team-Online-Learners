@@ -8,7 +8,7 @@ public class ReportEmotions : MonoBehaviour
     //public GameObject emotionalState;
     private float timer;
     private SpriteRenderer emotionalMarker;
-    private static float xScale, yScale;
+    private static float xScale = -1, yScale = -1;
     // Start is called before the first frame update
 
     private List<Emotion> emotionTrack = new List<Emotion>();
@@ -19,13 +19,25 @@ public class ReportEmotions : MonoBehaviour
     private int emotionTrackIndex = 0;
 
     private EmotionGraph emotionGraph;
+    
     void Start()
     {
+
+    }
+    public void Init()
+    {
+
         timer = 0.0f;
+        emotionTrackIndex = 0;
+        emotionTrack.Clear();
+        graphBars.Clear();
         GetGraphBars();
-        //emotionalMarker = emotionalState.GetComponent<SpriteRenderer>();
-        xScale = graphBars[0].transform.localScale.x;
-        yScale = graphBars[0].transform.localScale.y;
+
+        if (xScale == -1 && yScale == -1)
+        {
+            xScale = graphBars[0].transform.localScale.x;
+            yScale = graphBars[0].transform.localScale.y;
+        }
         //emotionTrack.Add(new Emotion(EmotionName.happy, 3, 0));
         //emotionTrack.Add(new Emotion(EmotionName.happy, 3, 8));
         //emotionTrack.Add(new Emotion(EmotionName.happy, 1, 10));
@@ -42,6 +54,12 @@ public class ReportEmotions : MonoBehaviour
         PopulateEmotionalTrack();
         nextEmotion = emotionTrack[emotionTrackIndex];
         emotionGraph = new EmotionGraph(30, nextEmotion, graphBars);
+        StartCoroutine(EmotionScript());        
+    }
+
+    public void Disable()
+    {
+        StopAllCoroutines();
     }
 
     public void GetGraphBars()
@@ -56,42 +74,53 @@ public class ReportEmotions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(timer >= nextEmotion.time)
-        {
-            previousEmotion = nextEmotion;
-            emotionGraph.addToStream(previousEmotion);
-            //emotionalMarker.color = nextEmotion.colour;
-            //emotionalState.transform.localScale = new Vector3(xScale, yScale * nextEmotion.magnitude);
 
-            emotionTrackIndex++;
-            if (emotionTrackIndex < emotionTrack.Count)
-                nextEmotion = emotionTrack[emotionTrackIndex];
-            else
-                nextEmotion = new Emotion(nextEmotion.emotionDef.emotionName, nextEmotion.magnitude, timer);
-            //emotionTrackIndex++;
-            //if(emotionTrackIndex < emotionTrack.Count)
-            //    nextEmotion = emotionTrack[++emotionTrackIndex];
-        }
-        else if(previousEmotion.Equals(nextEmotion))
+    }
+
+    IEnumerator EmotionScript()
+    {
+        while (true)
         {
-            float lerpMagnitude = Emotion.MagLerp(timer, previousEmotion, nextEmotion);
-            emotionGraph.addToStream(new Emotion(nextEmotion.emotionDef.emotionName,lerpMagnitude,timer));
-            //emotionalState.transform.localScale = new Vector3(xScale, yScale * lerpMagnitude);
+            if (timer >= nextEmotion.time)
+            {
+                previousEmotion = nextEmotion;
+                emotionGraph.addToStream(previousEmotion);
+                //emotionalMarker.color = nextEmotion.colour;
+                //emotionalState.transform.localScale = new Vector3(xScale, yScale * nextEmotion.magnitude);
+
+                emotionTrackIndex++;
+                if (emotionTrackIndex < emotionTrack.Count)
+                    nextEmotion = emotionTrack[emotionTrackIndex];
+                else
+                    nextEmotion = new Emotion(nextEmotion.emotionDef.emotionName, nextEmotion.magnitude, timer);
+                //emotionTrackIndex++;
+                //if(emotionTrackIndex < emotionTrack.Count)
+                //    nextEmotion = emotionTrack[++emotionTrackIndex];
+            }
+            else if (previousEmotion.Equals(nextEmotion))
+            {
+                float lerpMagnitude = Emotion.MagLerp(timer, previousEmotion, nextEmotion);
+                emotionGraph.addToStream(new Emotion(nextEmotion.emotionDef.emotionName, lerpMagnitude, timer));
+                //emotionalState.transform.localScale = new Vector3(xScale, yScale * lerpMagnitude);
+            }
+            timer += Time.deltaTime;
+            //Debug.Log(timer);
+            yield return null;
         }
-        timer += Time.deltaTime;
-        Debug.Log(timer);
     }
 
     public void PopulateEmotionalTrack()
     {
         foreach(String emotionText in emotionalSequence)
         {
+            float offset = ScenarioManager.offsets[ParamTracker.scenario - 1];
             string[] args = emotionText.Split(' ');
             Enum.TryParse(args[0], out EmotionName emotionName);
             float.TryParse(args[1], out float magnitude);
             float.TryParse(args[2], out float time);
-
-            emotionTrack.Add(new Emotion(emotionName, magnitude, time));
+            time = time - offset;
+            if(time >= 0)
+                emotionTrack.Add(new Emotion(emotionName, magnitude, time));
         }
 
         //int index = 0;
