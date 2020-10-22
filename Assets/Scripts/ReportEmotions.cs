@@ -6,9 +6,9 @@ using UnityEngine;
 public class ReportEmotions : MonoBehaviour
 {
     //public GameObject emotionalState;
+    private string name;
     private float timer;
-    private SpriteRenderer emotionalMarker;
-    private static float xScale = -1, yScale = -1;
+    private float xScale = -1, yScale = -1, yPos = -10, yHeight = -1;
     // Start is called before the first frame update
 
     private List<Emotion> emotionTrack = new List<Emotion>();
@@ -26,7 +26,7 @@ public class ReportEmotions : MonoBehaviour
     }
     public void Init()
     {
-
+        name = this.gameObject.name;
         timer = 0.0f;
         emotionTrackIndex = 0;
         emotionTrack.Clear();
@@ -37,23 +37,12 @@ public class ReportEmotions : MonoBehaviour
         {
             xScale = graphBars[0].transform.localScale.x;
             yScale = graphBars[0].transform.localScale.y;
+            yPos = graphBars[0].transform.position.y;
+            yHeight = graphBars[0].GetComponent<SpriteRenderer>().bounds.size.y;
         }
-        //emotionTrack.Add(new Emotion(EmotionName.happy, 3, 0));
-        //emotionTrack.Add(new Emotion(EmotionName.happy, 3, 8));
-        //emotionTrack.Add(new Emotion(EmotionName.happy, 1, 10));
-        //emotionTrack.Add(new Emotion(EmotionName.angry, 1, 10));
-        //emotionTrack.Add(new Emotion(EmotionName.angry, 3, 11));
-        //emotionTrack.Add(new Emotion(EmotionName.angry, 3, 15));
-        //emotionTrack.Add(new Emotion(EmotionName.angry, 1, 25));
-        //emotionTrack.Add(new Emotion(EmotionName.disgusted, 1, 25));
-        //emotionTrack.Add(new Emotion(EmotionName.disgusted, 2, 30));
-        //emotionTrack.Add(new Emotion(EmotionName.disgusted, 1, 40));
-        //emotionTrack.Add(new Emotion(EmotionName.disgusted, 1, 60));
-        //emotionTrack.Add(new Emotion(EmotionName.happy, 1, 60));
-        //emotionTrack.Add(new Emotion(EmotionName.happy, 2, 70));
         PopulateEmotionalTrack();
         nextEmotion = emotionTrack[emotionTrackIndex];
-        emotionGraph = new EmotionGraph(30, nextEmotion, graphBars);
+        emotionGraph = new EmotionGraph(30, nextEmotion, graphBars, xScale, yScale, yPos, yHeight);
         StartCoroutine(EmotionScript());        
     }
 
@@ -68,6 +57,8 @@ public class ReportEmotions : MonoBehaviour
         foreach (Transform barTrans in emotionGraph.transform)
         {
             graphBars.Add(barTrans.gameObject);
+            // set z value
+            barTrans.localPosition = new Vector3(barTrans.localPosition.x, barTrans.localPosition.y, 0);
         }
     }
 
@@ -115,22 +106,17 @@ public class ReportEmotions : MonoBehaviour
         {
             float offset = ScenarioManager.offsets[ParamTracker.scenario - 1];
             string[] args = emotionText.Split(' ');
-            Enum.TryParse(args[0], out EmotionName emotionName);
+            // if not legit emotion, set to neutral
+            bool legitEmotion = Enum.TryParse(args[0], out EmotionName emotionName);
+            if (!legitEmotion)
+                emotionName = EmotionName.neutral;
+
             float.TryParse(args[1], out float magnitude);
             float.TryParse(args[2], out float time);
             time = time - offset;
             if(time >= 0)
                 emotionTrack.Add(new Emotion(emotionName, magnitude, time));
         }
-
-        //int index = 0;
-        //while(index <= emotionTrack.Count - 2)
-        //{
-        //    Emotion currentEmotion = emotionTrack[index];
-        //    Emotion followingEmotion = emotionTrack[index + 1];
-        //    if (!currentEmotion.Equals(followingEmotion) && currentEmotion.time != followingEmotion.time)
-        //        return;
-        //}
     }
 
     private class EmotionGraph
@@ -141,8 +127,9 @@ public class ReportEmotions : MonoBehaviour
         private List<Emotion> emotionStream;
         private List<Emotion> graph;
         private List<GameObject> graphBars;
+        private float xScale, yScale, yPos, yHeight;
 
-        public EmotionGraph(int rangeSeconds, Emotion startEmotion, List<GameObject> graphBars)
+        public EmotionGraph(int rangeSeconds, Emotion startEmotion, List<GameObject> graphBars, float xScale, float yScale, float yPos, float yHeight)
         {
             this.rangeSeconds = rangeSeconds;
             this.numBars = graphBars.Count - 1;
@@ -155,6 +142,11 @@ public class ReportEmotions : MonoBehaviour
             {
                 graph.Add(currentEmotion);
             }
+
+            this.xScale = xScale;
+            this.yScale = yScale;
+            this.yPos = yPos;
+            this.yHeight = yHeight;
         }
 
         public void addToStream(Emotion emotion)
@@ -198,7 +190,7 @@ public class ReportEmotions : MonoBehaviour
         {
             for(int i = 0; i < graph.Count; i++)
             {
-                graph[i].Draw(this.graphBars[i]);
+                graph[i].Draw(this.graphBars[i], xScale, yScale, yPos, yHeight);
             }
         }
     }
@@ -217,7 +209,7 @@ public class ReportEmotions : MonoBehaviour
         public Emotion(EmotionName emotionName, float magnitude, float time)
         {
             this.emotionDef = new EmotionDefinition(emotionName);
-            this.magnitude = magnitude;
+            this.magnitude = emotionName == EmotionName.neutral ? 0.1f : magnitude;
             this.time = time;
         }
 
@@ -226,10 +218,13 @@ public class ReportEmotions : MonoBehaviour
             return this.emotionDef.emotionName == otherEmotion.emotionDef.emotionName;
         }
 
-        public void Draw(GameObject graphBar)
+        public void Draw(GameObject graphBar, float xScale, float yScale, float yPos, float yHeight)
         {
+            SpriteRenderer sprite = graphBar.GetComponent<SpriteRenderer>();
             graphBar.transform.localScale = new Vector3(xScale, yScale * this.magnitude);
-            graphBar.GetComponent<SpriteRenderer>().color = this.colour;
+            float yPosNew = yPos + (sprite.bounds.size.y - yHeight) / 2;
+            graphBar.transform.position = new Vector3(graphBar.transform.position.x, yPosNew);
+            sprite.color = this.colour;
         }
 
         public static float MagLerp(float currentTime, Emotion firstEmotion, Emotion secondEmotion)
@@ -245,7 +240,7 @@ public class ReportEmotions : MonoBehaviour
 
         public static Emotion GetUndefined(float time)
         {
-            return new Emotion(EmotionName.happy, 0, time);
+            return new Emotion(EmotionName.neutral, 0.1f, time);
         }
     } 
 
@@ -265,8 +260,8 @@ public class ReportEmotions : MonoBehaviour
             this.emotionName = emotionName;
             switch(emotionName)
             {
-                case EmotionName.happy:
-                    colour = Color.green;
+                case EmotionName.neutral:
+                    colour = Color.grey;
                     break;
                 case EmotionName.sad:
                     colour = Color.blue;
@@ -298,7 +293,7 @@ public class ReportEmotions : MonoBehaviour
 
     public enum EmotionName
     {
-        happy,
+        neutral,
         sad,
         disgusted,
         angry,

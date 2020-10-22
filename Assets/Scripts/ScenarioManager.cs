@@ -47,6 +47,9 @@ public class ScenarioManager : MonoBehaviour
             ReportEmotions.EmotionDefinition newEmotion = ReportEmotions.EmotionDefinition.GetEmotionDefinition(emotions[i]);
             legendObjects[i].GetComponent<UnityEngine.UI.Text>().text = newEmotion.emotionName.ToString();
             legendObjects[i].GetComponentInChildren<SpriteRenderer>().color = newEmotion.colour;
+            // set z value to 0 because for some stupid reason this sometimes changes to massive -ve value
+            Transform spriteTrans = legendObjects[i].transform.Find("Square").transform;
+            spriteTrans.position = new Vector3(spriteTrans.position.x, spriteTrans.position.y, 0);
         }
     }
 
