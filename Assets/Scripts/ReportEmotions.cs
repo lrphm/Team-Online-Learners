@@ -6,7 +6,7 @@ using UnityEngine;
 public class ReportEmotions : MonoBehaviour
 {
     //public GameObject emotionalState;
-    private string name;
+    private string participantName;
     private float timer;
     private float xScale = -1, yScale = -1, yPos = -10, yHeight = -1;
     // Start is called before the first frame update
@@ -16,6 +16,7 @@ public class ReportEmotions : MonoBehaviour
     // Lists populated in code inspector
     public List<string> emotionalSequence;
     private Emotion nextEmotion, previousEmotion;
+    private ScenarioManager parentScript;
     private int emotionTrackIndex = 0;
 
     private EmotionGraph emotionGraph;
@@ -26,7 +27,8 @@ public class ReportEmotions : MonoBehaviour
     }
     public void Init()
     {
-        name = this.gameObject.name;
+        parentScript = this.gameObject.transform.parent.gameObject.GetComponent<ScenarioManager>();
+        participantName = this.gameObject.name;
         timer = 0.0f;
         emotionTrackIndex = 0;
         emotionTrack.Clear();
@@ -41,6 +43,7 @@ public class ReportEmotions : MonoBehaviour
             yHeight = graphBars[0].GetComponent<SpriteRenderer>().bounds.size.y;
         }
         PopulateEmotionalTrack();
+        previousEmotion = new Emotion(EmotionName.neutral, 0f, 0f);
         nextEmotion = emotionTrack[emotionTrackIndex];
         emotionGraph = new EmotionGraph(30, nextEmotion, graphBars, xScale, yScale, yPos, yHeight);
         StartCoroutine(EmotionScript());        
@@ -68,12 +71,21 @@ public class ReportEmotions : MonoBehaviour
 
     }
 
+    public void ToggleEmotionGraphColours()
+    {
+        this.emotionGraph.ToggleColours();
+    }
+
     IEnumerator EmotionScript()
     {
         while (true)
         {
             if (timer >= nextEmotion.time)
             {
+                if(previousEmotion.emotionDef.emotionName == EmotionName.neutral && nextEmotion.emotionDef.emotionName != EmotionName.neutral)
+                {
+                    parentScript.AddAlertBox($"{participantName} has become {nextEmotion.emotionDef.emotionName}");
+                }
                 previousEmotion = nextEmotion;
                 emotionGraph.addToStream(previousEmotion);
                 //emotionalMarker.color = nextEmotion.colour;
@@ -94,6 +106,7 @@ public class ReportEmotions : MonoBehaviour
                 emotionGraph.addToStream(new Emotion(nextEmotion.emotionDef.emotionName, lerpMagnitude, timer));
                 //emotionalState.transform.localScale = new Vector3(xScale, yScale * lerpMagnitude);
             }
+
             timer += Time.deltaTime;
             //Debug.Log(timer);
             yield return null;
@@ -193,6 +206,14 @@ public class ReportEmotions : MonoBehaviour
                 graph[i].Draw(this.graphBars[i], xScale, yScale, yPos, yHeight);
             }
         }
+
+        public void ToggleColours()
+        {
+            for (int i = 0; i < graph.Count; i++)
+            {
+                graph[i].ToggleColour(this.graphBars[i]);
+            }
+        }
     }
 
     private class Emotion
@@ -203,7 +224,7 @@ public class ReportEmotions : MonoBehaviour
 
         public Color colour
         {
-            get { return this.emotionDef.colour; }
+            get { return this.emotionDef.Colour; }
         }
         
         public Emotion(EmotionName emotionName, float magnitude, float time)
@@ -227,6 +248,12 @@ public class ReportEmotions : MonoBehaviour
             sprite.color = this.colour;
         }
 
+        public void ToggleColour(GameObject graphBar)
+        {
+            SpriteRenderer sprite = graphBar.GetComponent<SpriteRenderer>();
+            sprite.color = this.colour;
+        }
+
         public static float MagLerp(float currentTime, Emotion firstEmotion, Emotion secondEmotion)
         {
             float y0, y1, x0, x1;
@@ -247,41 +274,41 @@ public class ReportEmotions : MonoBehaviour
     public struct EmotionDefinition
     {
         public EmotionName emotionName;
-        public Color colour;
-
-        public EmotionDefinition(EmotionName emotionName, Color colour)
-        {
-            this.emotionName = emotionName;
-            this.colour = colour;
+        public Color Colour {
+            get
+            {
+                Color colour;
+                switch (emotionName)
+                {
+                    case EmotionName.neutral:
+                        colour = ScenarioManager.colourBlind ? Color.cyan : Color.grey;
+                        break;
+                    case EmotionName.sad:
+                        colour = Color.blue;
+                        break;
+                    case EmotionName.angry:
+                        colour = Color.red;
+                        break;
+                    case EmotionName.disgusted:
+                        colour = new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
+                        break;
+                    case EmotionName.scared:
+                        colour = new Color(0.8396226f, 0.5578821f, 0.1069331f); // orange
+                        break;
+                    case EmotionName.confused:
+                        colour = Color.yellow;
+                        break;
+                    default:
+                        colour = Color.green;
+                        break;
+                }
+                return colour;
+            }
         }
 
         public EmotionDefinition(EmotionName emotionName)
         {
             this.emotionName = emotionName;
-            switch(emotionName)
-            {
-                case EmotionName.neutral:
-                    colour = Color.grey;
-                    break;
-                case EmotionName.sad:
-                    colour = Color.blue;
-                    break;
-                case EmotionName.angry:
-                    colour = Color.red;
-                    break;
-                case EmotionName.disgusted:
-                    colour = new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
-                    break;
-                case EmotionName.scared:
-                    colour = new Color(0.8396226f, 0.5578821f, 0.1069331f); // orange
-                    break;
-                case EmotionName.confused:
-                    colour = Color.yellow;
-                    break;
-                default:
-                    colour = Color.green;
-                    break;
-            }
         }
 
         public static EmotionDefinition GetEmotionDefinition(EmotionName emotionName)

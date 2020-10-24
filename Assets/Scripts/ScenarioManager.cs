@@ -8,8 +8,11 @@ public class ScenarioManager : MonoBehaviour
     // Start is called before the first frame update
     private int scenario;
     public static float[] offsets = { 13,0,0};
+    public static bool colourBlind = false;
     public List<GameObject> participants;
     public GameObject userCam;
+    public GameObject alertBoxPrefab;
+    public List<GameObject> alertBoxes = new List<GameObject>();
     private string[] names = { "jason", "carl", "jess" };
 
     void Start()
@@ -19,6 +22,7 @@ public class ScenarioManager : MonoBehaviour
 
     public void Init()
     {
+        RemoveAllAlertBoxes();
         scenario = ParamTracker.scenario;
         string resourceFolder = $"Scenario {scenario}/";
         GameObject participant;
@@ -33,24 +37,75 @@ public class ScenarioManager : MonoBehaviour
             participant.GetComponent<ReportEmotions>().Init();
         }
         userCam.GetComponent<UserWebCam>().Init();
+        SetLegend();
+        SetButtonText();
+    }
 
+    public void AddAlertBox(string alertText)
+    {
+        GameObject alertBox = GameObject.Instantiate(alertBoxPrefab, this.gameObject.transform);
+        alertBox.GetComponentInChildren<UnityEngine.UI.Text>().text = alertText;
+        if (alertBoxes.Count > 0)
+        {
+            float offset = 8.0f;
+            Vector3 offsetPosition = alertBoxes[alertBoxes.Count - 1].transform.localPosition;
+            offsetPosition += new Vector3(offset, -offset);
+            alertBox.transform.localPosition = offsetPosition;
+        }
+
+        alertBoxes.Add(alertBox);
+
+    }
+
+    public void RemoveAlertBox(GameObject closedAlertBox)
+    {
+        alertBoxes.Remove(closedAlertBox);
+        Destroy(closedAlertBox);
+    }
+
+    void RemoveAllAlertBoxes()
+    {
+        for(int i = alertBoxes.Count - 1; i >= 0; i--)
+            RemoveAlertBox(alertBoxes[i]);
+    }
+
+    void SetLegend()
+    {
         ReportEmotions.EmotionName[] emotions = (ReportEmotions.EmotionName[])System.Enum.GetValues(typeof(ReportEmotions.EmotionName));
         List<GameObject> legendObjects = new List<GameObject>();
-        foreach(Transform child in this.gameObject.transform)
+        
+        foreach (Transform child in this.gameObject.transform)
         {
             if (child.gameObject.name.StartsWith("Text"))
                 legendObjects.Add(child.gameObject);
         }
 
-        for(int i = 0; i < emotions.Length; i++)
+        for (int i = 0; i < emotions.Length; i++)
         {
             ReportEmotions.EmotionDefinition newEmotion = ReportEmotions.EmotionDefinition.GetEmotionDefinition(emotions[i]);
             legendObjects[i].GetComponent<UnityEngine.UI.Text>().text = newEmotion.emotionName.ToString();
-            legendObjects[i].GetComponentInChildren<SpriteRenderer>().color = newEmotion.colour;
+            legendObjects[i].GetComponentInChildren<SpriteRenderer>().color = newEmotion.Colour;
             // set z value to 0 because for some stupid reason this sometimes changes to massive -ve value
             Transform spriteTrans = legendObjects[i].transform.Find("Square").transform;
             spriteTrans.position = new Vector3(spriteTrans.position.x, spriteTrans.position.y, 0);
         }
+    }
+
+    public void ToggleColourPalette()
+    {
+        ScenarioManager.colourBlind = !ScenarioManager.colourBlind;
+        SetButtonText();
+        SetLegend();
+        for (int i = 0; i < participants.Count; i++)
+        {
+            participants[i].GetComponent<ReportEmotions>().ToggleEmotionGraphColours();
+        }
+    }
+
+    void SetButtonText()
+    {
+        GameObject button = this.gameObject.transform.Find("ChangeColours").gameObject;
+        button.GetComponentInChildren<UnityEngine.UI.Text>().text = colourBlind ? "Standard Colour Palette" : "Colour Blind Palette";
     }
 
     List<string> GetEmotionalSeq(string name)
@@ -66,10 +121,6 @@ public class ScenarioManager : MonoBehaviour
                         emotionalSeq.Add("happy 0.7 13");
                         emotionalSeq.Add("happy 0.7 40");
                         emotionalSeq.Add("happy 0.1 42");
-                        emotionalSeq.Add("confused 0.2 42");
-                        emotionalSeq.Add("confused 0.8 44");
-                        emotionalSeq.Add("confused 0.8 50");
-                        emotionalSeq.Add("confused 0.1 56");
                         emotionalSeq.Add("happy 0.1 56");
                         emotionalSeq.Add("happy 0.4 60");
                         emotionalSeq.Add("happy 0.7 65");
@@ -111,13 +162,6 @@ public class ScenarioManager : MonoBehaviour
                         emotionalSeq.Add("happy 0.5 13");
                         emotionalSeq.Add("happy 0.5 36");
                         emotionalSeq.Add("happy 0.1 37");
-                        emotionalSeq.Add("confused 0.1 37");
-                        emotionalSeq.Add("confused 1.5 38");
-                        emotionalSeq.Add("confused 1.5 43");
-                        emotionalSeq.Add("confused 1 47");
-                        emotionalSeq.Add("confused 0.4 51");
-                        emotionalSeq.Add("confused 0.2 55");
-                        emotionalSeq.Add("confused 0.2 58");
                         emotionalSeq.Add("happy 0.1 58");
                         emotionalSeq.Add("happy 0.5 65");
                         break;
@@ -173,8 +217,8 @@ public class ScenarioManager : MonoBehaviour
                         emotionalSeq.Add("happy 1.5 77");
                         break;
                     case 2:
-                        emotionalSeq.Add("sad 0.1 0");
-                        emotionalSeq.Add("sad 0.1 33");
+                        emotionalSeq.Add("sad 0.5 0");
+                        emotionalSeq.Add("sad 0.5 33");
                         emotionalSeq.Add("sad 1.6 39");
                         emotionalSeq.Add("sad 1.6 56");
                         emotionalSeq.Add("sad 1 65");
