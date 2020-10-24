@@ -281,22 +281,19 @@ public class ReportEmotions : MonoBehaviour
                 switch (emotionName)
                 {
                     case EmotionName.neutral:
-                        colour = ScenarioManager.colourBlind ? Color.cyan : Color.grey;
+                        colour = ScenarioManager.colourBlind ? new Color(1, 0.690f, 0) : Color.grey;
                         break;
                     case EmotionName.sad:
-                        colour = Color.blue;
+                        colour = ScenarioManager.colourBlind ? new Color(0.392f, 0.560f, 1) : Color.blue;
                         break;
                     case EmotionName.angry:
-                        colour = Color.red;
+                        colour = ScenarioManager.colourBlind ? new Color(0.862f, 0.149f, 0.498f) : Color.red;
                         break;
                     case EmotionName.disgusted:
-                        colour = new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
+                        colour = ScenarioManager.colourBlind ? new Color(0.470f, 0.368f, 0.941f) : new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
                         break;
                     case EmotionName.scared:
-                        colour = new Color(0.8396226f, 0.5578821f, 0.1069331f); // orange
-                        break;
-                    case EmotionName.confused:
-                        colour = Color.yellow;
+                        colour = ScenarioManager.colourBlind ? new Color(0.996f, 0.380f, 0) : new Color(0.8396226f, 0.5578821f, 0.1069331f); // orange
                         break;
                     default:
                         colour = Color.green;
@@ -324,7 +321,6 @@ public class ReportEmotions : MonoBehaviour
         sad,
         disgusted,
         angry,
-        scared,
-        confused
+        scared
     }
 }
