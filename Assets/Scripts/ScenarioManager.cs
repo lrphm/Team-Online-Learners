@@ -74,7 +74,7 @@ public class ScenarioManager : MonoBehaviour
         ReportEmotions.EmotionName[] emotions = (ReportEmotions.EmotionName[])System.Enum.GetValues(typeof(ReportEmotions.EmotionName));
         List<GameObject> legendObjects = new List<GameObject>();
         
-        foreach (Transform child in this.gameObject.transform)
+        foreach (Transform child in this.gameObject.transform.Find("Legend"))
         {
             if (child.gameObject.name.StartsWith("Text"))
                 legendObjects.Add(child.gameObject);
@@ -104,7 +104,7 @@ public class ScenarioManager : MonoBehaviour
 
     void SetButtonText()
     {
-        GameObject button = this.gameObject.transform.Find("ChangeColours").gameObject;
+        GameObject button = this.gameObject.transform.Find("Legend").Find("ChangeColours").gameObject;
         button.GetComponentInChildren<UnityEngine.UI.Text>().text = colourBlind ? "Standard Colour Palette" : "Colour Blind Palette";
     }
 
