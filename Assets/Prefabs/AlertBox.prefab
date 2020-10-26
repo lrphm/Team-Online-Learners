@@ -285,7 +285,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Test
 --- !u!1 &8351522496914947744
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +372,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8351522496914947744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a520b68f95bd8604ca6eda7895dfed99, type: 3}
+  m_Script: {fileID: 11500000, guid: 38523daf6558dc04ea53419eb855e030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
