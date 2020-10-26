@@ -140,7 +140,6 @@ public class ScenarioManager : MonoBehaviour
                         emotionalSeq.Add("happy 0.4 15");
                         emotionalSeq.Add("happy 0.3 20");
                         emotionalSeq.Add("happy 0.1 25");
-                        emotionalSeq.Add("angry 0.1 25");
                         emotionalSeq.Add("angry 0.1 28");
                         emotionalSeq.Add("angry 0.5 29");
                         emotionalSeq.Add("angry 0.7 38");

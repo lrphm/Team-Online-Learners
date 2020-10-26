@@ -19,6 +19,13 @@ public class ReportEmotions : MonoBehaviour
     private ScenarioManager parentScript;
     private int emotionTrackIndex = 0;
 
+    private static Dictionary<EmotionName, string> suggestions = new Dictionary<EmotionName, string>()
+    {
+        { EmotionName.scared, "If the cause is clear, perhaps you could help mitigate this." },
+        { EmotionName.angry, "If the cause is clear, it might be helpful to address it. Otherwise, perhaps a cooldown period would help." },
+        { EmotionName.sad, "If the cause is clear, it might be helpful to address it. Otherwise, reassurance or a compassionate inquiry might help." }
+    };
+
     private EmotionGraph emotionGraph;
     
     void Start()
@@ -84,7 +91,7 @@ public class ReportEmotions : MonoBehaviour
             {
                 if(previousEmotion.emotionDef.emotionName == EmotionName.neutral && nextEmotion.emotionDef.emotionName != EmotionName.neutral)
                 {
-                    parentScript.AddAlertBox($"{participantName} has become {nextEmotion.emotionDef.emotionName}");
+                    parentScript.AddAlertBox($"{participantName} has become {nextEmotion.emotionDef.emotionName}.\n{suggestions[nextEmotion.emotionDef.emotionName]}");
                 }
                 previousEmotion = nextEmotion;
                 emotionGraph.addToStream(previousEmotion);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UserWebCam : MonoBehaviour
 {
-    public bool useWebCam;
+    public static bool useWebCam;
     static WebCamTexture webCam;
     // Start is called before the first frame update
     void Start()

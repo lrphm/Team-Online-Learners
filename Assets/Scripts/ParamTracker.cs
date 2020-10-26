@@ -5,11 +5,12 @@ using UnityEngine;
 public class ParamTracker : MonoBehaviour
 {
     public static int scenario = 1;
-
+    private bool useWebCam = false;
     public GameObject startCanvas, meetingCanvas;
 
     void Awake()
     {
+        UserWebCam.useWebCam = this.useWebCam;
         DontDestroyOnLoad(this.gameObject);
     }
     // Start is called before the first frame update
@@ -40,5 +41,11 @@ public class ParamTracker : MonoBehaviour
     {
         meetingCanvas.GetComponent<ScenarioManager>().Disable();
         startCanvas.SetActive(true);
+    }
+
+    public void SetWebCamUse(bool useWebCam)
+    {
+        this.useWebCam = useWebCam;
+        UserWebCam.useWebCam = this.useWebCam;
     }
 }
