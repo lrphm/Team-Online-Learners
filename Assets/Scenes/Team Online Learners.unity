@@ -955,7 +955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &518813409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   - {fileID: 579175556}
   - {fileID: 483433334}
   userCam: {fileID: 3852424230381369669}
-  alertBoxPrefab: {fileID: 8351522496914947744, guid: aa9ea1b89ae91bb4ca9ae10657132dbc,
+  alertBoxPrefab: {fileID: 8351522496914947744, guid: 595c60da4ffd89e43b459ee8237504d1,
     type: 3}
   alertBoxes: []
 --- !u!1 &575830732
@@ -1486,7 +1486,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 308.15, y: -60.800003}
+  m_AnchoredPosition: {x: 0, y: -150}
   m_SizeDelta: {x: 146.49118, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &672724726
@@ -2331,7 +2331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1230138533
 MonoBehaviour:
   m_ObjectHideFlags: 0
