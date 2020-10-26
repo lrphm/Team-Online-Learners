@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UserWebCam : MonoBehaviour
 {
+    public bool useWebCam;
     static WebCamTexture webCam;
     // Start is called before the first frame update
     void Start()
@@ -13,17 +14,19 @@ public class UserWebCam : MonoBehaviour
 
     public void Init()
     {
-        if (webCam is null)
+        if (webCam is null && WebCamTexture.devices.Length > 0 && useWebCam)
+        {
             webCam = new WebCamTexture();
 
-        this.gameObject.transform.Find("Video Screen").GetComponent<UnityEngine.UI.RawImage>().texture = webCam;
+            this.gameObject.transform.Find("Video Screen").GetComponent<UnityEngine.UI.RawImage>().texture = webCam;
 
-        Play();
+            Play();
+        }
     }
 
     public void Disable()
     {
-        if (webCam.isPlaying)
+        if (!(webCam is null) && webCam.isPlaying)
             webCam.Stop();
     }
 

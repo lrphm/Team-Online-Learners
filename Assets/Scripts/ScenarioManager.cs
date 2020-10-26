@@ -217,7 +217,9 @@ public class ScenarioManager : MonoBehaviour
                         emotionalSeq.Add("happy 1.5 77");
                         break;
                     case 2:
-                        emotionalSeq.Add("sad 0.5 0");
+                        emotionalSeq.Add("happy 0.5 0");
+                        emotionalSeq.Add("happy 2 15");
+                        emotionalSeq.Add("happy 1 33");
                         emotionalSeq.Add("sad 0.5 33");
                         emotionalSeq.Add("sad 1.6 39");
                         emotionalSeq.Add("sad 1.6 56");
