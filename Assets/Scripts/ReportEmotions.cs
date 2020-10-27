@@ -296,7 +296,7 @@ public class ReportEmotions : MonoBehaviour
                     case EmotionName.angry:
                         colour = ScenarioManager.colourBlind ? new Color(0.862f, 0.149f, 0.498f) : Color.red;
                         break;
-                    case EmotionName.disgusted:
+                    case EmotionName.frustrated:
                         colour = ScenarioManager.colourBlind ? new Color(0.470f, 0.368f, 0.941f) : new Color(0.5143642f, 0.1058823f, 0.8392157f); // purple
                         break;
                     case EmotionName.scared:
@@ -326,7 +326,7 @@ public class ReportEmotions : MonoBehaviour
     {
         neutral,
         sad,
-        disgusted,
+        frustrated,
         angry,
         scared
     }
