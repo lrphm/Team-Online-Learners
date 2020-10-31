@@ -25,13 +25,13 @@ Low-Fid | https://drive.google.com/file/d/1UNf3IWX-QUM4t-EAuVX0bW4gyam9_pWB/view
 
 Use the links in the above table in the corresponding placeholders in the below instructions to use or build the application for the desired prototype. 
 
-*Application Use Instructions*
+<ins>Application Use Instructions</ins>
 1. Download/unzip the zipped application folder from {*Application URL*}.
 2. Go inside the unzipped folder and launch the application file *Team Online Learners.exe*.
 3. Select the meeting you would like to join from the dropdown and click "Join" (if using the high-fid prototype, you can check the "Use Webcam" box to use your webcam).
 4. When you are finished with the meeting, click the red hangup button in the bottom right of the screen and repeat step 3 until you have participated in all 3 meetings.
 
-*Application Build Instructions*
+<ins>Application Build Instructions</ins>
 1. Go to the code repositority commit for the target prototype on GitHub using {*Source Code URL*}.
 2. To the top-right of the tables displaying the commit files, click the green "Code" button -> Download Zip.
 3. Unzip the file, open Unity Hub and add the folder **indside** the unzipped folder to Unity Hub as a project.
@@ -45,4 +45,4 @@ Use the links in the above table in the corresponding placeholders in the below 
    * All check boxes should be unchecked
    * Compression Method = Default
 8. Click Build.
-9. Once the build has finished, to run the application execute the output application file and go to step 3 of *Application Use Instructions*. 
+9. Once the build has finished, to run the application execute the output application file and go to step 3 of <ins>Application Use Instructions</ins>. 
