@@ -21,7 +21,7 @@ Jason Yang | Research, analysis, user interface design and UX
 Prototype | Application URL | Source Code URL
 ------------ | ------------- | -------------
 High-Fid (final) | https://drive.google.com/file/d/1UNf3IWX-QUM4t-EAuVX0bW4gyam9_pWB/view?usp=sharing | https://github.com/lrphm/Team-Online-Learners.git  
-Low-Fid | https://drive.google.com/file/d/1UNf3IWX-QUM4t-EAuVX0bW4gyam9_pWB/view?usp=sharing | https://github.com/lrphm/Team-Online-Learners/tree/3c8740fab2ffd97b6911932636073059749a0a54
+Mid-Fid | https://drive.google.com/file/d/1QjFiSHKtIxeI_PQR-lgkPhXqcScg7CsX/view?usp=sharing | https://github.com/lrphm/Team-Online-Learners/tree/3c8740fab2ffd97b6911932636073059749a0a54
 
 Use the links in the above table in the corresponding placeholders in the below instructions to use or build the application for the desired prototype. 
 
