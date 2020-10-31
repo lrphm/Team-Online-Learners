@@ -36,7 +36,7 @@ Use the links in the above table in the corresponding placeholders in the below 
 2. To the top-right of the tables displaying the commit files, click the green "Code" button -> Download Zip.
 3. Unzip the file, open Unity Hub and add the folder **indside** the unzipped folder to Unity Hub as a project.
 4. Set the appropriate Unity version and open the project.
-5. **If building mid-fid:** open the Scenes folder under Project Assets and double-click on the scene *Team Online Learners*. 
+5. Open the Scenes folder under Project Assets and double-click on the scene called *Team Online Learners*. 
 6. Select File -> Build Settings
 7. Ensure config is as follows:
    * Platform = PC, Max & Linux Standalone
