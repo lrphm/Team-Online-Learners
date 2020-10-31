@@ -13,7 +13,7 @@ Jason Yang | Research, analysis, user interface design and UX
 
 ## Project Structure
 * Main Project Wiki - https://github.com/lrphm/Team-Online-Learners/wiki
-* Documentation - 
+* Documentation - https://drive.google.com/drive/folders/1nYTAPs7EjiuqhFeGVdIJuFXJrfGqijZw?usp=sharing
 * Prototype (build) - https://drive.google.com/file/d/1UNf3IWX-QUM4t-EAuVX0bW4gyam9_pWB/view?usp=sharing
 * Prototype (code) - https://github.com/lrphm/Team-Online-Learners.git
 
@@ -23,7 +23,7 @@ Prototype | Application URL | Source Code URL
 High-Fid (final) | https://drive.google.com/file/d/1UNf3IWX-QUM4t-EAuVX0bW4gyam9_pWB/view?usp=sharing | https://github.com/lrphm/Team-Online-Learners.git  
 Mid-Fid | https://drive.google.com/file/d/1QjFiSHKtIxeI_PQR-lgkPhXqcScg7CsX/view?usp=sharing | https://github.com/lrphm/Team-Online-Learners/tree/3c8740fab2ffd97b6911932636073059749a0a54
 
-Use the links in the above table in the corresponding placeholders in the below instructions to use or build the application for the desired prototype. 
+Use the links in the above table in the corresponding placeholders in the below instructions to use or build the application for the desired prototype. Only follow the building instructions if something goes wrong with using the current application files, they should otherwise be unnecessary. 
 
 <ins>Application Use Instructions</ins>
 1. Download/unzip the zipped application folder from {**Application URL**}.
